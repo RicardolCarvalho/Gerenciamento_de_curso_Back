@@ -1,0 +1,191 @@
+{
+  "info": {
+    "name": "Curso API Collection",
+    "_postman_id": "d2021baa-4f5c-4e3a-b7e2-1a2b3c4d5e6f",
+    "description": "Collection para testar a API de cursos e avaliações",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8080" },
+    { "key": "auth0Domain", "value": "dev-vlbhbshl7b1pxe8e.us.auth0.com" },
+    { "key": "auth0ClientId", "value": "eo8WNkaTwrcGujuCMSkRZG3yMYuQvXTy" },
+    {
+      "key": "auth0Audience",
+      "value": "https://dev-vlbhbshl7b1pxe8e.us.auth0.com/api/v2/"
+    },
+    { "key": "adminUser", "value": "admin@curso.com" },
+    { "key": "adminPass", "value": "Teste@123" },
+    { "key": "token", "value": "" },
+    { "key": "cursoId", "value": "" },
+    { "key": "avaliacaoId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Get Admin Token",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"grant_type\":\"password\",\n  \"username\":\"{{adminUser}}\",\n  \"password\":\"{{adminPass}}\",\n  \"audience\":\"{{auth0Audience}}\",\n  \"client_id\":\"{{auth0ClientId}}\"\n}"
+        },
+        "url": {
+          "raw": "https://{{auth0Domain}}/oauth/token",
+          "protocol": "https",
+          "host": ["{{auth0Domain}}"],
+          "path": ["oauth", "token"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "pm.environment.set(\"token\", json.access_token);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Course",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\":\"Spring Boot Avançado\",\n  \"descricao\":\"Descrição do curso avançado\",\n  \"cargaHoraria\":16,\n  \"instrutor\":\"Maria Silva\",\n  \"emailCriador\":\"{{adminUser}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cursos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cursos"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "pm.environment.set(\"cursoId\", json.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Courses",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/cursos",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cursos"]
+        }
+      }
+    },
+    {
+      "name": "Get Course Details",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/cursos/{{cursoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cursos", "{{cursoId}}"]
+        }
+      }
+    },
+    {
+      "name": "Update Course",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"titulo\":\"Spring Boot Master\",\n  \"descricao\":\"Conteúdo atualizado\",\n  \"cargaHoraria\":20,\n  \"instrutor\":\"Maria Silva\",\n  \"emailCriador\":\"{{adminUser}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/cursos/{{cursoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cursos", "{{cursoId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Course",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/cursos/{{cursoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "cursos", "{{cursoId}}"]
+        }
+      }
+    },
+    {
+      "name": "Create Evaluation",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Authorization", "value": "Bearer {{token}}" },
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"emailAluno\":\"aluno@curso.com\",\n  \"nota\":5,\n  \"titulo\":\"Ótimo curso!\",\n  \"descricao\":\"Aprendi muito.\",\n  \"cursoId\":\"{{cursoId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/avaliacoes",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "avaliacoes"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var json = pm.response.json();",
+              "pm.environment.set(\"avaliacaoId\", json.id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Evaluations by Course",
+      "request": {
+        "method": "GET",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/avaliacoes/curso/{{cursoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "avaliacoes", "curso", "{{cursoId}}"]
+        }
+      }
+    },
+    {
+      "name": "Delete Evaluation",
+      "request": {
+        "method": "DELETE",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }],
+        "url": {
+          "raw": "{{baseUrl}}/api/avaliacoes/{{avaliacaoId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "avaliacoes", "{{avaliacaoId}}"]
+        }
+      }
+    }
+  ]
+}
