@@ -17,10 +17,10 @@ public class SecurityConfig {
         http
           .cors().and()
           .authorizeHttpRequests(auth -> auth
-              .requestMatchers(HttpMethod.POST,   "/api/cursos/**").hasRole("ADMIN")
-              .requestMatchers(HttpMethod.PUT,    "/api/cursos/**").hasRole("ADMIN")
-              .requestMatchers(HttpMethod.DELETE, "/api/cursos/**").hasRole("ADMIN")
-              .requestMatchers(HttpMethod.DELETE, "/api/avaliacoes/**").hasRole("ADMIN")
+            //   .requestMatchers(HttpMethod.POST,   "/api/cursos/**").hasRole("ADMIN")
+            //   .requestMatchers(HttpMethod.PUT,    "/api/cursos/**").hasRole("ADMIN")
+            //   .requestMatchers(HttpMethod.DELETE, "/api/cursos/**").hasRole("ADMIN")
+            //   .requestMatchers(HttpMethod.DELETE, "/api/avaliacoes/**").hasRole("ADMIN")
               .requestMatchers("/api/**").authenticated()
           )
           .oauth2ResourceServer(oauth2 -> oauth2.jwt());
