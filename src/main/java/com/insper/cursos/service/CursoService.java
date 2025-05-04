@@ -11,7 +11,6 @@ import java.util.List;
 
 @Service
 public class CursoService {
-
     private final CursoRepository repo;
     private final Grupo2Config.Grupo2Client grupo2Client;
 

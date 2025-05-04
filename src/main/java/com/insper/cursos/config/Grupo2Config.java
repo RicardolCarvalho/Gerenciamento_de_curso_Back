@@ -6,8 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.util.UUID;
-
 @Configuration
 public class Grupo2Config {
 
@@ -33,7 +31,7 @@ public class Grupo2Config {
             this.wc = wc;
         }
 
-        public Mono<Boolean> hasMatriculas(UUID cursoId) {
+        public Mono<Boolean> hasMatriculas(String cursoId) {
             return wc.get()
                      .uri("/matriculas/curso/{id}", cursoId)
                      .retrieve()
