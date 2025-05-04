@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,16 +29,15 @@ public class AvaliacaoController {
     }
 
     @GetMapping("/curso/{cursoId}")
-    public List<AvaliacaoResponse> listarPorCurso(@PathVariable UUID cursoId) {
-        return service.listarPorCurso(cursoId)
-                      .stream()
+    public List<AvaliacaoResponse> listarPorCurso(@PathVariable String cursoId) {
+        return service.listarPorCurso(cursoId).stream()
                       .map(AvaliacaoResponse::fromEntity)
                       .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable UUID id) {
+    public void excluir(@PathVariable String id) {
         service.excluir(id);
     }
 }

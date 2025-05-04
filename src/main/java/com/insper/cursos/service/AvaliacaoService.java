@@ -6,10 +6,10 @@ import com.insper.cursos.repository.AvaliacaoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class AvaliacaoService {
+
     private final AvaliacaoRepository repo;
 
     public AvaliacaoService(AvaliacaoRepository repo) {
@@ -20,11 +20,11 @@ public class AvaliacaoService {
         return repo.save(a);
     }
 
-    public List<Avaliacao> listarPorCurso(UUID cursoId) {
+    public List<Avaliacao> listarPorCurso(String cursoId) {
         return repo.findByCursoId(cursoId);
     }
 
-    public void excluir(UUID id) {
+    public void excluir(String id) {
         if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Avaliação não encontrada: " + id);
         }

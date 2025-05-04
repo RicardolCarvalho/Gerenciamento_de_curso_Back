@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,7 +29,7 @@ public class CursoController {
     }
 
     @PutMapping("/{id}")
-    public CursoResponse atualizar(@PathVariable UUID id,
+    public CursoResponse atualizar(@PathVariable String id,
                                    @Valid @RequestBody CursoRequest req) {
         Curso updated = service.atualizar(id, req.toEntity());
         return CursoResponse.fromEntity(updated);
@@ -38,20 +37,19 @@ public class CursoController {
 
     @GetMapping
     public List<CursoResponse> listar() {
-        return service.listar()
-                      .stream()
+        return service.listar().stream()
                       .map(CursoResponse::fromEntity)
                       .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public CursoResponse detalhes(@PathVariable UUID id) {
+    public CursoResponse detalhes(@PathVariable String id) {
         return CursoResponse.fromEntity(service.buscarPorId(id));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable UUID id) {
+    public void excluir(@PathVariable String id) {
         service.excluir(id);
     }
 }

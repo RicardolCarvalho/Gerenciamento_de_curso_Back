@@ -6,13 +6,12 @@ import com.insper.cursos.exception.ResourceNotFoundException;
 import com.insper.cursos.model.Curso;
 import com.insper.cursos.repository.CursoRepository;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CursoService {
+
     private final CursoRepository repo;
     private final Grupo2Config.Grupo2Client grupo2Client;
 
@@ -25,7 +24,7 @@ public class CursoService {
         return repo.save(curso);
     }
 
-    public Curso atualizar(UUID id, Curso curso) {
+    public Curso atualizar(String id, Curso curso) {
         if (!repo.existsById(id)) {
             throw new ResourceNotFoundException("Curso não encontrado: " + id);
         }
@@ -37,12 +36,12 @@ public class CursoService {
         return repo.findAll();
     }
 
-    public Curso buscarPorId(UUID id) {
+    public Curso buscarPorId(String id) {
         return repo.findById(id)
                    .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado: " + id));
     }
 
-    public void excluir(UUID id) {
+    public void excluir(String id) {
         boolean has = grupo2Client.hasMatriculas(id).block();
         if (has) {
             throw new BusinessException("Não é possível excluir; existem matrículas.");

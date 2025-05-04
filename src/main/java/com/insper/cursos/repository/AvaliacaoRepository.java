@@ -4,8 +4,7 @@ import com.insper.cursos.model.Avaliacao;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface AvaliacaoRepository extends MongoRepository<Avaliacao, UUID> {
-    List<Avaliacao> findByCursoId(UUID cursoId);
+public interface AvaliacaoRepository extends MongoRepository<Avaliacao, String> {
+    List<Avaliacao> findByCursoId(String cursoId);
 }

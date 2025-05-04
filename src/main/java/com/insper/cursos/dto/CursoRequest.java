@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import com.insper.cursos.model.Curso;
 
 public class CursoRequest {
+
     @NotBlank
     private String titulo;
 

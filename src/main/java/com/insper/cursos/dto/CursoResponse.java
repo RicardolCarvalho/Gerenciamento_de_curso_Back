@@ -2,17 +2,16 @@ package com.insper.cursos.dto;
 
 import com.insper.cursos.model.Curso;
 
-import java.util.UUID;
-
 public class CursoResponse {
-    private UUID id;
+
+    private String id;
     private String titulo;
     private String descricao;
     private Integer cargaHoraria;
     private String instrutor;
     private String emailCriador;
 
-    public CursoResponse(UUID id, String titulo, String descricao,
+    public CursoResponse(String id, String titulo, String descricao,
                          Integer cargaHoraria, String instrutor, String emailCriador) {
         this.id = id;
         this.titulo = titulo;
@@ -33,7 +32,7 @@ public class CursoResponse {
         );
     }
 
-    public UUID getId() { return id; }
+    public String getId() { return id; }
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
     public Integer getCargaHoraria() { return cargaHoraria; }

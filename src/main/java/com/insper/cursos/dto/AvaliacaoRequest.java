@@ -1,13 +1,12 @@
 package com.insper.cursos.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import com.insper.cursos.model.Avaliacao;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import java.util.UUID;
-
 public class AvaliacaoRequest {
+
     @NotBlank
     private String emailAluno;
 
@@ -20,7 +19,8 @@ public class AvaliacaoRequest {
     @NotBlank
     private String descricao;
 
-    private UUID cursoId;
+    @NotBlank
+    private String cursoId;
 
     public String getEmailAluno() { return emailAluno; }
     public void setEmailAluno(String emailAluno) { this.emailAluno = emailAluno; }
@@ -30,8 +30,8 @@ public class AvaliacaoRequest {
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
-    public UUID getCursoId() { return cursoId; }
-    public void setCursoId(UUID cursoId) { this.cursoId = cursoId; }
+    public String getCursoId() { return cursoId; }
+    public void setCursoId(String cursoId) { this.cursoId = cursoId; }
 
     public Avaliacao toEntity() {
         Avaliacao a = new Avaliacao();

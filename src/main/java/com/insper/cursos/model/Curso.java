@@ -4,12 +4,12 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
-import java.util.UUID;
 
 @Document(collection = "cursos")
 public class Curso {
+
     @Id
-    private UUID id;
+    private String id;
 
     @NotBlank
     private String titulo;
@@ -26,8 +26,8 @@ public class Curso {
     @NotBlank
     private String emailCriador;
 
-    public UUID getId() { return id; }
-    public void setId(UUID id) { this.id = id; }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public String getDescricao() { return descricao; }

@@ -2,18 +2,17 @@ package com.insper.cursos.dto;
 
 import com.insper.cursos.model.Avaliacao;
 
-import java.util.UUID;
-
 public class AvaliacaoResponse {
-    private UUID id;
+
+    private String id;
     private String emailAluno;
     private Integer nota;
     private String titulo;
     private String descricao;
-    private UUID cursoId;
+    private String cursoId;
 
-    public AvaliacaoResponse(UUID id, String emailAluno, Integer nota, String titulo,
-                              String descricao, UUID cursoId) {
+    public AvaliacaoResponse(String id, String emailAluno, Integer nota,
+                              String titulo, String descricao, String cursoId) {
         this.id = id;
         this.emailAluno = emailAluno;
         this.nota = nota;
@@ -33,10 +32,10 @@ public class AvaliacaoResponse {
         );
     }
 
-    public UUID getId() { return id; }
+    public String getId() { return id; }
     public String getEmailAluno() { return emailAluno; }
     public Integer getNota() { return nota; }
     public String getTitulo() { return titulo; }
     public String getDescricao() { return descricao; }
-    public UUID getCursoId() { return cursoId; }
+    public String getCursoId() { return cursoId; }
 }
