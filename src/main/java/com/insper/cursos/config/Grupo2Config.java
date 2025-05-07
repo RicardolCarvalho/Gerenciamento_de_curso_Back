@@ -1,10 +1,14 @@
 package com.insper.cursos.config;
 
+import com.insper.cursos.dto.MatriculaDTO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Configuration
 public class Grupo2Config {
@@ -33,10 +37,11 @@ public class Grupo2Config {
 
         public Mono<Boolean> hasMatriculas(String cursoId) {
             return wc.get()
-                     .uri("/matriculas/curso/{id}", cursoId)
-                     .retrieve()
-                     .bodyToMono(Boolean.class)
-                     .onErrorReturn(false);
+                    .uri("/curso/{id}", cursoId)
+                    .retrieve()
+                    .bodyToMono(new ParameterizedTypeReference<List<MatriculaDTO>>() {})
+                    .map(list -> !list.isEmpty())
+                    .onErrorReturn(false);
         }
     }
 }
