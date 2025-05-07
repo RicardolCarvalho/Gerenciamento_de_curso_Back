@@ -38,13 +38,12 @@ public class Grupo2Config {
 
         public Mono<Boolean> hasMatriculas(String cursoId, String token) {
             return wc.get()
-                    .uri("/curso/{id}", cursoId)
+                    .uri("/curso/{id}", cursoId)                       // montará …/matricula/curso/{id}
                     .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .retrieve()
-                    .bodyToFlux(MatriculaDTO.class)
-                    .hasElements()
+                    .bodyToFlux(MatriculaDTO.class)                    // mapeia cada objeto do array
+                    .hasElements()                                     // true se houver ao menos 1
                     .onErrorReturn(false);
         }
-
     }
 }
