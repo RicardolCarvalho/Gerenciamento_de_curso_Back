@@ -53,10 +53,13 @@ public class CursoController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void excluir(
             @PathVariable String id,
-            @AuthenticationPrincipal Jwt jwt    // injeta o JWT do request
+            @RequestHeader("Authorization") String authHeader
     ) {
-        // extrai o token bruto, sem “Bearer ”
-        String token = jwt.getTokenValue();
-        service.excluir(id, token);          // passa para o service
+        // header vem como "Bearer xyz"
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new IllegalArgumentException("Header Authorization mal formado");
+        }
+        String token = authHeader.substring(7);
+        service.excluir(id, token);
     }
 }

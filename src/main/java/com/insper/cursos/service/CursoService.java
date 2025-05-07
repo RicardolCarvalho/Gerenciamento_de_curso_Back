@@ -40,9 +40,7 @@ public class CursoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado: " + id));
     }
 
-    // alteração: agora recebe também o token
     public void excluir(String id, String token) {
-        // chama o client passando o token no header
         boolean has = grupo2Client.hasMatriculas(id, token).block();
         if (has) {
             throw new BusinessException("Não é possível excluir; existem matrículas.");
