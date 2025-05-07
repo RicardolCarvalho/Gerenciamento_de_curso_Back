@@ -5,6 +5,8 @@ import com.insper.cursos.dto.CursoResponse;
 import com.insper.cursos.model.Curso;
 import com.insper.cursos.service.CursoService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
@@ -38,8 +40,8 @@ public class CursoController {
     @GetMapping
     public List<CursoResponse> listar() {
         return service.listar().stream()
-                      .map(CursoResponse::fromEntity)
-                      .collect(Collectors.toList());
+                .map(CursoResponse::fromEntity)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -49,7 +51,12 @@ public class CursoController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void excluir(@PathVariable String id) {
-        service.excluir(id);
+    public void excluir(
+            @PathVariable String id,
+            @AuthenticationPrincipal Jwt jwt    // injeta o JWT do request
+    ) {
+        // extrai o token bruto, sem “Bearer ”
+        String token = jwt.getTokenValue();
+        service.excluir(id, token);          // passa para o service
     }
 }

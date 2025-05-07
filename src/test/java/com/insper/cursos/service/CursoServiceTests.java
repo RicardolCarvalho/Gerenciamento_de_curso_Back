@@ -15,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +31,7 @@ public class CursoServiceTests {
     private Grupo2Config.Grupo2Client grupo2Client;
 
     private Curso exemplo;
+    private String token;
 
     @BeforeEach
     void setup() {
@@ -40,6 +42,8 @@ public class CursoServiceTests {
         exemplo.setCargaHoraria(20);
         exemplo.setInstrutor("João");
         exemplo.setEmailCriador("joao@ex.com");
+
+        token = "dummy-token";
     }
 
     @Test
@@ -99,9 +103,9 @@ public class CursoServiceTests {
         var updated = service.atualizar("abc", exemplo);
 
         assertSame(exemplo, updated);
+        assertEquals("abc", exemplo.getId());
         verify(repo).existsById("abc");
         verify(repo).save(exemplo);
-        assertEquals("abc", exemplo.getId());
     }
 
     @Test
@@ -116,34 +120,37 @@ public class CursoServiceTests {
 
     @Test
     void excluir_quandoNaoHaMatriculas_deletaPorId() {
-        when(grupo2Client.hasMatriculas("abc")).thenReturn(Mono.just(false));
+        when(grupo2Client.hasMatriculas(eq("abc"), eq(token)))
+                .thenReturn(Mono.just(false));
         doNothing().when(repo).deleteById("abc");
 
-        assertDoesNotThrow(() -> service.excluir("abc"));
+        assertDoesNotThrow(() -> service.excluir("abc", token));
 
-        verify(grupo2Client).hasMatriculas("abc");
+        verify(grupo2Client).hasMatriculas("abc", token);
         verify(repo).deleteById("abc");
     }
 
     @Test
     void excluir_quandoHaMatriculas_lancaBusinessException() {
-        when(grupo2Client.hasMatriculas("abc")).thenReturn(Mono.just(true));
+        when(grupo2Client.hasMatriculas(eq("abc"), eq(token)))
+                .thenReturn(Mono.just(true));
 
         assertThrows(BusinessException.class,
-                () -> service.excluir("abc"));
+                () -> service.excluir("abc", token));
 
-        verify(grupo2Client).hasMatriculas("abc");
+        verify(grupo2Client).hasMatriculas("abc", token);
         verify(repo, never()).deleteById(any());
     }
 
     @Test
     void excluir_quandoClienteReativoRetornaNull_lancaNPE() {
         // simula cliente mal configurado retornando null
-        when(grupo2Client.hasMatriculas("abc")).thenReturn(null);
+        when(grupo2Client.hasMatriculas(eq("abc"), eq(token)))
+                .thenReturn(null);
 
         assertThrows(NullPointerException.class,
-                () -> service.excluir("abc"));
+                () -> service.excluir("abc", token));
 
-        verify(grupo2Client).hasMatriculas("abc");
+        verify(grupo2Client).hasMatriculas("abc", token);
     }
 }

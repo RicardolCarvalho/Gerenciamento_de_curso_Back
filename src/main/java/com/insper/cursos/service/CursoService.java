@@ -37,11 +37,13 @@ public class CursoService {
 
     public Curso buscarPorId(String id) {
         return repo.findById(id)
-                   .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Curso não encontrado: " + id));
     }
 
-    public void excluir(String id) {
-        boolean has = grupo2Client.hasMatriculas(id).block();
+    // alteração: agora recebe também o token
+    public void excluir(String id, String token) {
+        // chama o client passando o token no header
+        boolean has = grupo2Client.hasMatriculas(id, token).block();
         if (has) {
             throw new BusinessException("Não é possível excluir; existem matrículas.");
         }

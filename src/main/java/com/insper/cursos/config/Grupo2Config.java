@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -35,13 +36,15 @@ public class Grupo2Config {
             this.wc = wc;
         }
 
-        public Mono<Boolean> hasMatriculas(String cursoId) {
+        public Mono<Boolean> hasMatriculas(String cursoId, String token) {
             return wc.get()
                     .uri("/curso/{id}", cursoId)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + token)
                     .retrieve()
-                    .bodyToMono(new ParameterizedTypeReference<List<MatriculaDTO>>() {})
-                    .map(list -> !list.isEmpty())
+                    .bodyToFlux(MatriculaDTO.class)
+                    .hasElements()
                     .onErrorReturn(false);
         }
+
     }
 }
