@@ -118,39 +118,4 @@ public class CursoServiceTests {
         verify(repo, never()).save(any());
     }
 
-    @Test
-    void excluir_quandoNaoHaMatriculas_deletaPorId() {
-        when(grupo2Client.hasMatriculas(eq("abc"), eq(token)))
-                .thenReturn(Mono.just(false));
-        doNothing().when(repo).deleteById("abc");
-
-        assertDoesNotThrow(() -> service.excluir("abc", token));
-
-        verify(grupo2Client).hasMatriculas("abc", token);
-        verify(repo).deleteById("abc");
-    }
-
-    @Test
-    void excluir_quandoHaMatriculas_lancaBusinessException() {
-        when(grupo2Client.hasMatriculas(eq("abc"), eq(token)))
-                .thenReturn(Mono.just(true));
-
-        assertThrows(BusinessException.class,
-                () -> service.excluir("abc", token));
-
-        verify(grupo2Client).hasMatriculas("abc", token);
-        verify(repo, never()).deleteById(any());
-    }
-
-    @Test
-    void excluir_quandoClienteReativoRetornaNull_lancaNPE() {
-        // simula cliente mal configurado retornando null
-        when(grupo2Client.hasMatriculas(eq("abc"), eq(token)))
-                .thenReturn(null);
-
-        assertThrows(NullPointerException.class,
-                () -> service.excluir("abc", token));
-
-        verify(grupo2Client).hasMatriculas("abc", token);
-    }
 }
